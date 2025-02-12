@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react"
 import { useAuth } from "@/lib/auth-context"
-import type { TEvent, TEventType } from "@/lib/types"
+import type { TEvent, TEventType, TPermission } from "@/lib/types"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
@@ -21,6 +21,7 @@ import {
   AlertDialogTitle,
 } from "@/components/ui/alert-dialog"
 import { useRouter } from "next/navigation"
+import { NoResults } from "@/components/NoResults"
 
 export default function EventsPage() {
   const router = useRouter()
@@ -84,12 +85,12 @@ export default function EventsPage() {
     setFilteredEvents([...originalEvents])
   }
 
-  const handleRelatedEventClick = (eventId: string) => {
+  const handleRelatedEventClick = (eventId: number) => {
     const relatedEvent = events.find((e) => e.id === eventId)
     if (relatedEvent) setSelectedEvent(relatedEvent)
   }
 
-  const getRelatedEventNames = (relatedIds: string[]): TEvent[] => {
+  const getRelatedEventNames = (relatedIds: number[]): { id: number; name: string; permission?: TPermission }[] => {
     return relatedIds
       .map((id) => events.find((e) => e.id === id))
       .filter((event): event is TEvent => !!event && (isAuthenticated || event.permission !== "private"))
@@ -142,13 +143,17 @@ export default function EventsPage() {
           </Button>
         </div>
 
-        <Reorder.Group axis="y" values={filteredEvents} onReorder={setFilteredEvents} className="space-y-6">
-          {filteredEvents.map((event) => (
-            <Reorder.Item key={event.id} value={event}>
-              <EventTile event={event} onClick={() => setSelectedEvent(event)} />
-            </Reorder.Item>
-          ))}
-        </Reorder.Group>
+        {filteredEvents.length > 0 ? (
+          <Reorder.Group axis="y" values={filteredEvents} onReorder={setFilteredEvents} className="space-y-6">
+            {filteredEvents.map((event) => (
+              <Reorder.Item key={event.id} value={event}>
+                <EventTile event={event} onClick={() => setSelectedEvent(event)} />
+              </Reorder.Item>
+            ))}
+          </Reorder.Group>
+        ) : (
+          <NoResults />
+        )}
       </div>
 
       <EventModal
