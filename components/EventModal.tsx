@@ -41,8 +41,8 @@ export const EventModal: React.FC<EventModalProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[600px] p-0 gap-0 overflow-hidden">
-        {/* Close button */}
+      <DialogContent className="sm:max-w-[600px] p-0 gap-0 overflow-hidden" hideCloseButton>
+        {/* Custom close button */}
         <button
           onClick={onClose}
           className="absolute right-6 top-6 z-10 p-2 rounded-full hover:bg-gray-100 transition-colors"
@@ -88,17 +88,24 @@ export const EventModal: React.FC<EventModalProps> = ({
                 {event.speakers.map((speaker, index) => (
                   <div 
                     key={index}
-                    className="flex items-center gap-4 px-4 py-3 rounded-xl bg-gray-50 border border-gray-100"
+                    className="flex items-center gap-5 px-6 py-4 rounded-xl bg-gray-50/50 border border-gray-100"
                   >
                     {speaker.profile_pic && (
-                      <Avatar className="h-8 w-8 border border-gray-200">
-                        <AvatarImage src={speaker.profile_pic} alt={speaker.name} />
-                      </Avatar>
+                      <div className="relative">
+                        <Avatar className="h-24 w-24 border-4 border-white shadow-lg rounded-full overflow-hidden">
+                          <AvatarImage 
+                            src={speaker.profile_pic} 
+                            alt={speaker.name}
+                            className="object-cover"
+                          />
+                        </Avatar>
+                        <div className="absolute inset-0 rounded-full border-2 border-gray-100" />
+                      </div>
                     )}
                     <div>
-                      <p className="font-medium text-gray-900">{speaker.name}</p>
+                      <p className="text-lg font-semibold text-gray-900">{speaker.name}</p>
                       {speaker.role && (
-                        <p className="text-sm text-gray-500">{speaker.role}</p>
+                        <p className="text-sm text-gray-600">{speaker.role}</p>
                       )}
                     </div>
                   </div>

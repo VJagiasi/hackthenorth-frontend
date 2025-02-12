@@ -84,9 +84,16 @@ export const EventTile: React.FC<EventTileProps> = ({ event, onClick }) => {
                 <div key={index} className="flex items-center gap-2">
                   <span className="text-sm text-gray-600">Speaker:</span>
                   {speaker.profile_pic && (
-                    <Avatar className="h-8 w-8 border border-gray-100">
-                      <AvatarImage src={speaker.profile_pic} alt={speaker.name} />
-                    </Avatar>
+                    <div className="relative">
+                      <Avatar className="h-12 w-12 border-2 border-white shadow-lg rounded-full overflow-hidden">
+                        <AvatarImage 
+                          src={speaker.profile_pic} 
+                          alt={speaker.name}
+                          className="object-cover"
+                        />
+                      </Avatar>
+                      <div className="absolute inset-0 rounded-full border-2 border-gray-100" />
+                    </div>
                   )}
                   <span className="text-sm text-gray-600">{speaker.name}</span>
                 </div>
