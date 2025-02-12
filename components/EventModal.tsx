@@ -143,7 +143,7 @@ export const EventModal: React.FC<EventModalProps> = ({
                 href={event.public_url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center text-primary hover:text-primary/80 transition-colors"
+                className="flex items-center text-primary hover:text-primary/80 transition-all duration-300 transform hover:-translate-y-0.5"
               >
                 Public Link <span className="ml-2">↗</span>
               </a>
@@ -153,7 +153,7 @@ export const EventModal: React.FC<EventModalProps> = ({
                 href={event.private_url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center text-primary hover:text-primary/80 transition-colors"
+                className="flex items-center text-primary hover:text-primary/80 transition-all duration-300 transform hover:-translate-y-0.5"
               >
                 Private Link <span className="ml-2">↗</span>
               </a>
