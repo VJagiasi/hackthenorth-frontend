@@ -11,7 +11,7 @@ export function Navbar() {
 
   return (
     <nav className="border-b">
-      <div className="container mx-auto px-4 h-16 flex items-center justify-between">
+      <div className="container mx-auto px-4 max-w-screen-lg flex items-center justify-between h-16">
         <Link href="/" className="font-bold text-xl gradient-text">
           Hack the North
         </Link>
