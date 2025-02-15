@@ -4,8 +4,10 @@ import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import type { TEvent, TPermission } from "@/lib/types"
 import { formatDate } from "@/lib/utils"
-import { X } from "lucide-react"
+import { X, ArrowUpRight } from "lucide-react"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import Link from "next/link"
+import { motion } from "framer-motion"
 
 interface EventModalProps {
   event: TEvent | null
@@ -88,6 +90,46 @@ export const EventModal: React.FC<EventModalProps> = ({
           </div>
 
           <div className="px-3 sm:px-4 space-y-4">
+            {/* Event URLs */}
+            <div className="flex gap-6 text-sm">
+              {event.public_url && (
+                <motion.a 
+                  href={event.public_url} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1 text-gray-900 hover:text-primary transition-colors group"
+                  whileHover={{ y: -2 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                >
+                  Public Link
+                  <motion.span
+                    initial={{ opacity: 0.5 }}
+                    whileHover={{ opacity: 1 }}
+                  >
+                    <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                  </motion.span>
+                </motion.a>
+              )}
+              {isAuthenticated && event.private_url && (
+                <motion.a 
+                  href={event.private_url} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1 text-gray-900 hover:text-primary transition-colors group"
+                  whileHover={{ y: -2 }}
+                  transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                >
+                  Private Link
+                  <motion.span
+                    initial={{ opacity: 0.5 }}
+                    whileHover={{ opacity: 1 }}
+                  >
+                    <ArrowUpRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                  </motion.span>
+                </motion.a>
+              )}
+            </div>
+
             {/* Speakers */}
             {event.speakers.length > 0 && (
               <div className="space-y-3">
