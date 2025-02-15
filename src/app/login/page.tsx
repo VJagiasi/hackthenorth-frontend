@@ -7,8 +7,9 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
-import { Check, Copy, Eye, EyeOff } from "lucide-react"
+import { Check, Copy, Eye, EyeOff, ArrowRight } from "lucide-react"
 import { cn } from "@/lib/utils"
+import { motion } from "framer-motion"
 
 export default function LoginPage() {
   const [username, setUsername] = useState("")
@@ -210,10 +211,26 @@ export default function LoginPage() {
 
             <Button 
               type="submit" 
-              className="w-full h-11 rounded-xl bg-primary hover:bg-primary/90 transition-colors"
+              className="relative w-full h-11 rounded-xl bg-primary hover:bg-primary/90 transition-all duration-300 group"
               disabled={isLoading}
             >
-              {isLoading ? "Signing in..." : "Sign In"}
+              <div className="flex items-center justify-center gap-2">
+                <span className="relative z-10 font-medium">
+                  {isLoading ? "Signing in..." : "Sign In"}
+                </span>
+                <motion.div
+                  className="relative z-10 text-white/70 group-hover:text-white transition-colors duration-300"
+                  animate={{ x: 0, opacity: 0.7 }}
+                  whileHover={{ x: 8, opacity: 1 }}
+                  transition={{
+                    duration: 0.2,
+                    ease: [0.3, 0.0, 0.0, 1],
+                    opacity: { duration: 0.15 }
+                  }}
+                >
+                  <ArrowRight className="h-4 w-4" />
+                </motion.div>
+              </div>
             </Button>
           </form>
         </CardContent>
