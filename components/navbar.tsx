@@ -20,7 +20,7 @@ import {
 
 export function Navbar() {
   const pathname = usePathname()
-  const { isAuthenticated, logout } = useAuth()
+  const { isAuthenticated, isLoading, logout } = useAuth()
   const [showLogoutDialog, setShowLogoutDialog] = useState(false)
 
   return (
@@ -39,41 +39,43 @@ export function Navbar() {
           </span>
         </Link>
         <div className="flex items-center gap-4">
-          {isAuthenticated ? (
-            <>
-              <Button 
-                variant="ghost" 
-                className="gap-2"
-                onClick={() => setShowLogoutDialog(true)}
-              >
-                <LogOut className="h-4 w-4" />
-                Sign Out
-              </Button>
+          {!isLoading && (
+            isAuthenticated ? (
+              <>
+                <Button 
+                  variant="ghost" 
+                  className="gap-2"
+                  onClick={() => setShowLogoutDialog(true)}
+                >
+                  <LogOut className="h-4 w-4" />
+                  Sign Out
+                </Button>
 
-              <AlertDialog open={showLogoutDialog} onOpenChange={setShowLogoutDialog}>
-                <AlertDialogContent className="rounded-xl">
-                  <AlertDialogHeader>
-                    <AlertDialogTitle>Sign Out</AlertDialogTitle>
-                    <AlertDialogDescription>
-                      Are you sure you want to sign out? You'll need to sign in again to access private events.
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel className="rounded-lg">Cancel</AlertDialogCancel>
-                    <AlertDialogAction 
-                      onClick={logout}
-                      className="rounded-lg bg-red-500 hover:bg-red-600"
-                    >
-                      Sign Out
-                    </AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
-            </>
-          ) : (
-            <Button asChild variant="default">
-              <Link href="/login">Login</Link>
-            </Button>
+                <AlertDialog open={showLogoutDialog} onOpenChange={setShowLogoutDialog}>
+                  <AlertDialogContent className="rounded-xl">
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Sign Out</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        Are you sure you want to sign out? You'll need to sign in again to access private events.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel className="rounded-lg">Cancel</AlertDialogCancel>
+                      <AlertDialogAction 
+                        onClick={logout}
+                        className="rounded-lg bg-red-500 hover:bg-red-600"
+                      >
+                        Sign Out
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
+              </>
+            ) : (
+              <Button asChild variant="default">
+                <Link href="/login">Login</Link>
+              </Button>
+            )
           )}
         </div>
       </div>

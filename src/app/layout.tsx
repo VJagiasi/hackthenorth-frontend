@@ -11,9 +11,6 @@ export const metadata: Metadata = {
     icon: "/icons/favicon.ico",
     apple: "/icons/apple-touch-icon.png",
   },
-  manifest: "/icons/site.webmanifest",
-  themeColor: "#000000",
-  viewport: "width=device-width, initial-scale=1.0",
 }
 
 export default function RootLayout({
@@ -23,6 +20,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head>
+        <link rel="icon" href="/icons/favicon.ico" />
+        <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png" />
+        <link rel="manifest" href="/icons/site.webmanifest" />
+      </head>
       <body className={inter.className}>{children}</body>
     </html>
   )
