@@ -20,7 +20,7 @@ import {
 
 export function Navbar() {
   const pathname = usePathname()
-  const { user, logout } = useAuth()
+  const { isAuthenticated, logout } = useAuth()
   const [showLogoutDialog, setShowLogoutDialog] = useState(false)
 
   return (
@@ -39,7 +39,7 @@ export function Navbar() {
           </span>
         </Link>
         <div className="flex items-center gap-4">
-          {user ? (
+          {isAuthenticated ? (
             <>
               <Button 
                 variant="ghost" 

@@ -26,7 +26,7 @@ import { Footer } from "@/components/Footer"
 
 export default function EventsPage() {
   const router = useRouter()
-  const { user, logout } = useAuth()
+  const { isAuthenticated, logout } = useAuth()
   const [events, setEvents] = useState<TEvent[]>([])
   const [filteredEvents, setFilteredEvents] = useState<TEvent[]>([])
   const [originalEvents, setOriginalEvents] = useState<TEvent[]>([])
@@ -43,7 +43,7 @@ export default function EventsPage() {
         const data: TEvent[] = await response.json()
 
         const sortedEvents = data.sort((a, b) => a.start_time - b.start_time)
-        const visibleEvents = user
+        const visibleEvents = isAuthenticated
           ? sortedEvents
           : sortedEvents.filter((event) => event.permission !== "private")
 
@@ -58,7 +58,7 @@ export default function EventsPage() {
     }
 
     fetchEvents()
-  }, [user])
+  }, [isAuthenticated])
 
   useEffect(() => {
     const filtered = events.filter(
@@ -94,7 +94,7 @@ export default function EventsPage() {
   const getRelatedEventNames = (relatedIds: number[]): { id: number; name: string; permission?: TPermission }[] => {
     return relatedIds
       .map((id) => events.find((e) => e.id === id))
-      .filter((event): event is TEvent => !!event && (!!user || event.permission !== "private"))
+      .filter((event): event is TEvent => !!event && (!!isAuthenticated || event.permission !== "private"))
   }
 
   // Add a function to check if current order matches original order
@@ -182,7 +182,7 @@ export default function EventsPage() {
         onClose={() => setSelectedEvent(null)}
         onRelatedEventClick={handleRelatedEventClick}
         getRelatedEventNames={getRelatedEventNames}
-        isAuthenticated={!!user}
+        isAuthenticated={!!isAuthenticated}
       />
 
       <AlertDialog open={showLogoutDialog} onOpenChange={setShowLogoutDialog}>
