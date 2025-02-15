@@ -17,6 +17,8 @@ export default function LoginPage() {
   const [copiedUser, setCopiedUser] = useState(false)
   const [copiedPass, setCopiedPass] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
+  const [usernameError, setUsernameError] = useState(false)
+  const [passwordError, setPasswordError] = useState(false)
   const router = useRouter()
   const { login } = useAuth()
 
@@ -34,12 +36,32 @@ export default function LoginPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError("")
+    setUsernameError(false)
+    setPasswordError(false)
+
+    // Validate fields
+    let hasError = false
+    if (!username) {
+      setUsernameError(true)
+      hasError = true
+    }
+    if (!password) {
+      setPasswordError(true)
+      hasError = true
+    }
+
+    if (hasError) {
+      setError("Please fill in all required fields")
+      return
+    }
 
     const success = await login(username, password)
     if (success) {
       router.push("/events")
     } else {
       setError("Invalid credentials")
+      setUsernameError(true)
+      setPasswordError(true)
     }
   }
 
@@ -62,21 +84,33 @@ export default function LoginPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="space-y-2">
-              <Label htmlFor="username" className="text-sm font-medium">
+          <form onSubmit={handleSubmit} className="space-y-4" noValidate>
+            <div className="space-y-1">
+              <Label htmlFor="username" className="text-sm font-medium flex items-center gap-1">
                 Username
+                <span className="text-red-500">*</span>
               </Label>
               <Input
                 id="username"
                 type="text"
                 value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                onChange={(e) => {
+                  setUsername(e.target.value)
+                  setUsernameError(false)
+                  setError("")
+                }}
                 required
-                className="h-11 rounded-xl bg-white border-[#E5E7EB] focus:border-primary focus:ring-primary"
+                className={cn(
+                  "h-11 rounded-xl bg-white border-[#E5E7EB] focus:border-primary focus:ring-primary transition-colors",
+                  usernameError && "border-red-500 focus:border-red-500 focus:ring-red-500"
+                )}
                 placeholder="Enter your username"
+                noValidate
               />
-              <div className="flex items-center gap-2 text-sm text-gray-600">
+              {usernameError && !error && (
+                <p className="text-red-500 text-sm mt-1">Username is required</p>
+              )}
+              <div className="flex items-center gap-2 text-sm text-gray-600 mt-1">
                 <span>Test value:</span>
                 <button
                   type="button"
@@ -92,19 +126,29 @@ export default function LoginPage() {
                 </button>
               </div>
             </div>
-            <div className="space-y-2">
-              <Label htmlFor="password" className="text-sm font-medium">
+
+            <div className="space-y-1">
+              <Label htmlFor="password" className="text-sm font-medium flex items-center gap-1">
                 Password
+                <span className="text-red-500">*</span>
               </Label>
               <div className="relative group">
                 <Input
                   id="password"
                   type={showPassword ? "text" : "password"}
                   value={password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  onChange={(e) => {
+                    setPassword(e.target.value)
+                    setPasswordError(false)
+                    setError("")
+                  }}
                   required
-                  className="h-11 rounded-xl bg-white border-[#E5E7EB] focus:border-primary focus:ring-primary pr-12 transition-all"
+                  className={cn(
+                    "h-11 rounded-xl bg-white border-[#E5E7EB] focus:border-primary focus:ring-primary pr-12 transition-all",
+                    passwordError && "border-red-500 focus:border-red-500 focus:ring-red-500"
+                  )}
                   placeholder="Enter your password"
+                  noValidate
                 />
                 <button
                   type="button"
@@ -127,7 +171,10 @@ export default function LoginPage() {
                   )}
                 </button>
               </div>
-              <div className="flex items-center gap-2 text-sm text-gray-600">
+              {passwordError && !error && (
+                <p className="text-red-500 text-sm mt-1">Password is required</p>
+              )}
+              <div className="flex items-center gap-2 text-sm text-gray-600 mt-1">
                 <span>Test value:</span>
                 <button
                   type="button"
@@ -143,11 +190,13 @@ export default function LoginPage() {
                 </button>
               </div>
             </div>
+
             {error && (
-              <div className="bg-destructive/10 text-destructive text-sm p-3 rounded-lg">
+              <p className="text-red-500 text-sm">
                 {error}
-              </div>
+              </p>
             )}
+
             <Button 
               type="submit" 
               className="w-full h-11 rounded-xl bg-primary hover:bg-primary/90 transition-colors"
