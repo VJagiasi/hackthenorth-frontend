@@ -116,7 +116,7 @@ export default function EventsPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="container max-w-5xl mx-auto px-6 py-12 space-y-8">
+      <div className="container max-w-[900px] mx-auto px-8 py-12 space-y-8">
         <div className="flex items-center justify-between mb-8">
           <h1 className="text-3xl font-bold">
             Events
