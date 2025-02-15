@@ -41,7 +41,10 @@ export const EventModal: React.FC<EventModalProps> = ({
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[600px] p-0 gap-0 overflow-hidden" hideCloseButton>
+      <DialogContent 
+        className="max-w-[90vw] sm:max-w-[600px] max-h-[85vh] mx-4 rounded-2xl sm:rounded-3xl p-6 overflow-y-auto border-0"
+        hideCloseButton
+      >
         {/* Custom close button */}
         <button
           onClick={onClose}

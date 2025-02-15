@@ -52,18 +52,20 @@ export function Navbar() {
                 </Button>
 
                 <AlertDialog open={showLogoutDialog} onOpenChange={setShowLogoutDialog}>
-                  <AlertDialogContent className="rounded-xl">
-                    <AlertDialogHeader>
-                      <AlertDialogTitle>Sign Out</AlertDialogTitle>
-                      <AlertDialogDescription>
+                  <AlertDialogContent className="max-w-[360px] max-h-[85vh] mx-4 rounded-xl p-6 overflow-y-auto">
+                    <AlertDialogHeader className="space-y-3">
+                      <AlertDialogTitle className="text-lg">Sign Out</AlertDialogTitle>
+                      <AlertDialogDescription className="text-sm">
                         Are you sure you want to sign out? You'll need to sign in again to access private events.
                       </AlertDialogDescription>
                     </AlertDialogHeader>
-                    <AlertDialogFooter>
-                      <AlertDialogCancel className="rounded-lg">Cancel</AlertDialogCancel>
+                    <AlertDialogFooter className="mt-4 gap-2">
+                      <AlertDialogCancel className="rounded-lg text-sm h-9">
+                        Cancel
+                      </AlertDialogCancel>
                       <AlertDialogAction 
                         onClick={logout}
-                        className="rounded-lg bg-red-500 hover:bg-red-600"
+                        className="rounded-lg bg-red-500 hover:bg-red-600 text-sm h-9"
                       >
                         Sign Out
                       </AlertDialogAction>
