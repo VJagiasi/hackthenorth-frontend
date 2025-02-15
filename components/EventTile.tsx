@@ -61,31 +61,31 @@ export const EventTile: React.FC<EventTileProps> = ({ event, onClick }) => {
       transition={{ duration: 0.2 }}
     >
       <Card 
-        className="cursor-pointer group p-6 transition-all duration-300 rounded-[32px] border border-[#E5E7EB] hover:border-primary/20 relative overflow-hidden bg-white shadow-sm hover:shadow-lg" 
+        className="cursor-pointer group p-4 sm:p-6 transition-all duration-300 rounded-2xl sm:rounded-[32px] border border-[#E5E7EB] hover:border-primary/20 relative overflow-hidden bg-white shadow-sm hover:shadow-lg" 
         onClick={onClick}
       >
-        <div className="flex flex-col gap-4">
-          <h3 className="font-semibold text-xl text-gray-900 group-hover:text-primary transition-colors">
+        <div className="flex flex-col gap-3 sm:gap-4">
+          <h3 className="font-semibold text-lg sm:text-xl text-gray-900 group-hover:text-primary transition-colors">
             {event.name}
           </h3>
           
-          <div className="flex items-center gap-3 flex-wrap text-sm">
-            <span className={`font-medium px-4 py-1.5 rounded-full ${getTagStyles(event.event_type)}`}>
+          <div className="flex items-center gap-2 sm:gap-3 flex-wrap text-xs sm:text-sm">
+            <span className={`font-medium px-3 py-1 sm:px-4 sm:py-1.5 rounded-full ${getTagStyles(event.event_type)}`}>
               {formatEventType(event.event_type)}
             </span>
-            <span className="px-4 py-1.5 rounded-full border-2 border-gray-800 text-gray-800 font-medium">
+            <span className="px-3 py-1 sm:px-4 sm:py-1.5 rounded-full border-2 border-gray-800 text-gray-800 font-medium">
               {formatTimeRange(event.start_time, event.end_time)}
             </span>
           </div>
 
           {event.speakers.length > 0 && (
-            <div className="flex items-center gap-3 pt-2">
+            <div className="flex items-center gap-2 sm:gap-3 pt-1 sm:pt-2">
               {event.speakers.map((speaker, index) => (
                 <div key={index} className="flex items-center gap-2">
-                  <span className="text-sm text-gray-600">Speaker:</span>
+                  <span className="text-xs sm:text-sm text-gray-600">Speaker:</span>
                   {speaker.profile_pic && (
                     <div className="relative">
-                      <Avatar className="h-12 w-12 border-2 border-white shadow-lg rounded-full overflow-hidden">
+                      <Avatar className="h-8 w-8 sm:h-12 sm:w-12 border-2 border-white shadow-lg rounded-full overflow-hidden">
                         <AvatarImage 
                           src={speaker.profile_pic} 
                           alt={speaker.name}
@@ -95,7 +95,7 @@ export const EventTile: React.FC<EventTileProps> = ({ event, onClick }) => {
                       <div className="absolute inset-0 rounded-full border-2 border-gray-100" />
                     </div>
                   )}
-                  <span className="text-sm text-gray-600">{speaker.name}</span>
+                  <span className="text-xs sm:text-sm text-gray-600">{speaker.name}</span>
                 </div>
               ))}
             </div>

@@ -42,73 +42,77 @@ export const EventModal: React.FC<EventModalProps> = ({
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent 
-        className="max-w-[90vw] sm:max-w-[600px] max-h-[85vh] mx-4 rounded-2xl sm:rounded-3xl p-6 overflow-y-auto border-0"
+        className="fixed left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%] 
+          w-[min(calc(100%-32px),500px)]
+          max-h-[min(calc(100vh-48px),700px)]
+          min-h-[200px]
+          rounded-2xl sm:rounded-3xl 
+          p-4 sm:p-6 
+          overflow-y-auto overflow-x-hidden
+          border-0 
+          bg-white shadow-xl"
         hideCloseButton
       >
-        {/* Custom close button */}
         <button
           onClick={onClose}
-          className="absolute right-6 top-6 z-10 p-2 rounded-full hover:bg-gray-100 transition-colors"
+          className="absolute right-3 sm:right-4 top-3 sm:top-4 z-10 p-1.5 rounded-full hover:bg-gray-100 transition-colors"
         >
-          <X className="h-5 w-5" />
+          <X className="h-4 w-4" />
         </button>
 
-        <div className="p-8 pb-4">
-          <div className="flex flex-col gap-6">
-            {/* Title */}
-            <h2 className="text-3xl font-bold tracking-tight text-gray-900">
+        <div className="p-3 sm:p-4">
+          <div className="flex flex-col gap-4">
+            <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-gray-900 pr-8 break-words">
               {event.name}
             </h2>
 
-            {/* Event Type and Time in same line */}
-            <div className="flex items-center gap-3 flex-wrap">
+            <div className="flex flex-wrap gap-2">
               <span 
-                className={`inline-flex px-4 py-1.5 rounded-full text-sm font-medium border-2 w-fit ${getEventTypeStyles(event.event_type)}`}
+                className={`inline-flex px-3 py-1 rounded-full text-xs sm:text-sm font-medium border w-fit ${getEventTypeStyles(event.event_type)}`}
               >
                 {event.event_type.split("_").map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(" ")}
               </span>
-              <div className="inline-flex px-4 py-1.5 rounded-full text-sm font-medium border-2 border-gray-900 text-gray-900 w-fit">
+              <div className="inline-flex px-3 py-1 rounded-full text-xs sm:text-sm font-medium border border-gray-900 text-gray-900 w-fit">
                 {formatDate(event.start_time)} - {formatDate(event.end_time)}
               </div>
             </div>
           </div>
         </div>
 
-        <ScrollArea className="px-8 py-6 max-h-[60vh] border-y bg-gray-50/30">
-          <div className="prose prose-gray max-w-none">
-            <p className="text-gray-600 leading-relaxed text-lg">
+        <ScrollArea className="px-3 sm:px-4 py-4 max-h-[40vh] border-y bg-gray-50/30">
+          <div className="max-w-full">
+            <p className="text-sm sm:text-base text-gray-600 leading-relaxed break-words">
               {event.description}
             </p>
           </div>
         </ScrollArea>
 
-        <div className="p-8 pt-6 space-y-6">
+        <div className="p-3 sm:p-4 space-y-4">
           {/* Speakers */}
           {event.speakers.length > 0 && (
-            <div className="space-y-4">
-              <h3 className="text-xl font-semibold text-gray-900">Speakers:</h3>
-              <div className="space-y-3">
+            <div className="space-y-3">
+              <h3 className="text-lg font-semibold text-gray-900">Speakers:</h3>
+              <div className="space-y-2">
                 {event.speakers.map((speaker, index) => (
                   <div 
                     key={index}
-                    className="flex items-center gap-5 px-6 py-4 rounded-xl bg-gray-50/50 border border-gray-100"
+                    className="flex items-center gap-3 p-3 rounded-xl bg-gray-50/50 border border-gray-100"
                   >
                     {speaker.profile_pic && (
                       <div className="relative">
-                        <Avatar className="h-24 w-24 border-4 border-white shadow-lg rounded-full overflow-hidden">
+                        <Avatar className="h-12 w-12 sm:h-16 sm:w-16 border-2 border-white shadow-md rounded-full overflow-hidden">
                           <AvatarImage 
                             src={speaker.profile_pic} 
                             alt={speaker.name}
                             className="object-cover"
                           />
                         </Avatar>
-                        <div className="absolute inset-0 rounded-full border-2 border-gray-100" />
                       </div>
                     )}
                     <div>
-                      <p className="text-lg font-semibold text-gray-900">{speaker.name}</p>
+                      <p className="text-sm sm:text-base font-semibold text-gray-900">{speaker.name}</p>
                       {speaker.role && (
-                        <p className="text-sm text-gray-600">{speaker.role}</p>
+                        <p className="text-xs sm:text-sm text-gray-600">{speaker.role}</p>
                       )}
                     </div>
                   </div>
@@ -118,51 +122,26 @@ export const EventModal: React.FC<EventModalProps> = ({
           )}
 
           {/* Related Events */}
-        
           {event.related_events.length > 0 && (
-              <div>
-                <h4 className="font-semibold">Related Events:</h4>
-                <div className="flex flex-wrap gap-2">
-                  {getRelatedEventNames(event.related_events)
-                    .filter((relatedEvent) => isAuthenticated || relatedEvent.permission !== "private")
-                    .map((relatedEvent) => (
-                      <Button
-                        key={relatedEvent.id}
-                        variant="outline"
-                        size="sm"
-                        onClick={() => onRelatedEventClick(relatedEvent.id)}
-                      >
-                        {relatedEvent.name}
-                      </Button>
-                    ))}
-                </div>
+            <div className="space-y-3">
+              <h4 className="text-lg font-semibold text-gray-900">Related Events:</h4>
+              <div className="flex flex-wrap gap-2">
+                {getRelatedEventNames(event.related_events)
+                  .filter((relatedEvent) => isAuthenticated || relatedEvent.permission !== "private")
+                  .map((relatedEvent) => (
+                    <Button
+                      key={relatedEvent.id}
+                      variant="outline"
+                      size="sm"
+                      onClick={() => onRelatedEventClick(relatedEvent.id)}
+                      className="text-xs sm:text-sm h-8 sm:h-9"
+                    >
+                      {relatedEvent.name}
+                    </Button>
+                  ))}
               </div>
-            )}
-
-          {/* Links Section */}
-          <div className="flex flex-col gap-2 text-lg">
-            {event.public_url && (
-              <a
-                href={event.public_url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center text-primary hover:text-primary/80 transition-all duration-300 transform hover:-translate-y-0.5"
-              >
-                Public Link <span className="ml-2">↗</span>
-              </a>
-            )}
-            {isAuthenticated && event.private_url && (
-              <a
-                href={event.private_url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center text-primary hover:text-primary/80 transition-all duration-300 transform hover:-translate-y-0.5"
-              >
-                Private Link <span className="ml-2">↗</span>
-              </a>
-            )}
-          </div>
-
+            </div>
+          )}
         </div>
       </DialogContent>
     </Dialog>
