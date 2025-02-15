@@ -1,4 +1,4 @@
-# Hack the North Events
+# Hackathon Global
 
 Welcome to the Hack the North Events! This project is the result of thoughtful design, careful planning, and hands-on development. It’s built with modern tools to give you features like user authentication, event sorting, filtering, and more—all in a simple, easy-to-use interface.
 
