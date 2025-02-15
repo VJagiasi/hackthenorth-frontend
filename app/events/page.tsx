@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/alert-dialog"
 import { useRouter } from "next/navigation"
 import { NoResults } from "@/components/NoResults"
+import { Footer } from "@/components/Footer"
 
 export default function EventsPage() {
   const router = useRouter()
@@ -115,62 +116,65 @@ export default function EventsPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="container max-w-[900px] mx-auto px-8 py-12 space-y-8">
-        <div className="flex items-center justify-between mb-8">
-          <h1 className="text-3xl font-bold">
-            Events
-            <div className="h-1 w-24 bg-gradient-to-r from-primary via-secondary to-accent mt-1" />
-          </h1>
-        </div>
-
-        <div className="flex flex-wrap gap-6 items-center">
-          <div className="relative flex-1 min-w-[280px]">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input
-              placeholder="Search events..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-9 bg-muted/50"
-            />
+    <div className="min-h-screen bg-background flex flex-col">
+      <div className="flex-1">
+        <div className="container max-w-[900px] mx-auto px-8 py-12 space-y-8">
+          <div className="flex items-center justify-between mb-8">
+            <h1 className="text-3xl font-bold">
+              Events
+              <div className="h-1 w-24 bg-gradient-to-r from-primary via-secondary to-accent mt-1" />
+            </h1>
           </div>
-          <Select value={selectedType} onValueChange={(value) => setSelectedType(value as TEventType | "all")}>
-            <SelectTrigger className="w-[160px]">
-              <SelectValue placeholder="All Types" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">All Types</SelectItem>
-              <SelectItem value="workshop">Workshop</SelectItem>
-              <SelectItem value="activity">Activity</SelectItem>
-              <SelectItem value="tech_talk">Tech Talk</SelectItem>
-            </SelectContent>
-          </Select>
-          <Button variant="outline" size="sm" onClick={resetFilters} className="h-9 px-5">
-            Clear Filters
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={resetSort}
-            className="h-9 px-5"
-            disabled={isDefaultOrder()}
-          >
-            Reset Sort
-          </Button>
-        </div>
 
-        {filteredEvents.length > 0 ? (
-          <Reorder.Group axis="y" values={filteredEvents} onReorder={setFilteredEvents} className="space-y-6">
-            {filteredEvents.map((event) => (
-              <Reorder.Item key={event.id} value={event}>
-                <EventTile event={event} onClick={() => setSelectedEvent(event)} />
-              </Reorder.Item>
-            ))}
-          </Reorder.Group>
-        ) : (
-          <NoResults />
-        )}
+          <div className="flex flex-wrap gap-6 items-center">
+            <div className="relative flex-1 min-w-[280px]">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Input
+                placeholder="Search events..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                className="pl-9 bg-muted/50"
+              />
+            </div>
+            <Select value={selectedType} onValueChange={(value) => setSelectedType(value as TEventType | "all")}>
+              <SelectTrigger className="w-[160px]">
+                <SelectValue placeholder="All Types" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Types</SelectItem>
+                <SelectItem value="workshop">Workshop</SelectItem>
+                <SelectItem value="activity">Activity</SelectItem>
+                <SelectItem value="tech_talk">Tech Talk</SelectItem>
+              </SelectContent>
+            </Select>
+            <Button variant="outline" size="sm" onClick={resetFilters} className="h-9 px-5">
+              Clear Filters
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={resetSort}
+              className="h-9 px-5"
+              disabled={isDefaultOrder()}
+            >
+              Reset Sort
+            </Button>
+          </div>
+
+          {filteredEvents.length > 0 ? (
+            <Reorder.Group axis="y" values={filteredEvents} onReorder={setFilteredEvents} className="space-y-6">
+              {filteredEvents.map((event) => (
+                <Reorder.Item key={event.id} value={event}>
+                  <EventTile event={event} onClick={() => setSelectedEvent(event)} />
+                </Reorder.Item>
+              ))}
+            </Reorder.Group>
+          ) : (
+            <NoResults />
+          )}
+        </div>
       </div>
+      <Footer />
 
       <EventModal
         event={selectedEvent}
