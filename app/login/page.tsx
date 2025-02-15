@@ -7,7 +7,8 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Label } from "@/components/ui/label"
-import { Check, Copy } from "lucide-react"
+import { Check, Copy, Eye, EyeOff } from "lucide-react"
+import { cn } from "@/lib/utils"
 
 export default function LoginPage() {
   const [username, setUsername] = useState("")
@@ -15,6 +16,7 @@ export default function LoginPage() {
   const [error, setError] = useState("")
   const [copiedUser, setCopiedUser] = useState(false)
   const [copiedPass, setCopiedPass] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
   const router = useRouter()
   const { login } = useAuth()
 
@@ -94,15 +96,37 @@ export default function LoginPage() {
               <Label htmlFor="password" className="text-sm font-medium">
                 Password
               </Label>
-              <Input
-                id="password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                className="h-11 rounded-xl bg-white border-[#E5E7EB] focus:border-primary focus:ring-primary"
-                placeholder="Enter your password"
-              />
+              <div className="relative group">
+                <Input
+                  id="password"
+                  type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  className="h-11 rounded-xl bg-white border-[#E5E7EB] focus:border-primary focus:ring-primary pr-12 transition-all"
+                  placeholder="Enter your password"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className={cn(
+                    "absolute right-3 top-1/2 -translate-y-1/2",
+                    "p-1.5 rounded-lg",
+                    "text-gray-400 hover:text-gray-600",
+                    "bg-transparent hover:bg-gray-100",
+                    "transition-all duration-200 ease-in-out",
+                    "focus:outline-none focus:ring-2 focus:ring-primary/20",
+                    "active:scale-95"
+                  )}
+                  aria-label={showPassword ? "Hide password" : "Show password"}
+                >
+                  {showPassword ? (
+                    <Eye className="h-4 w-4 transition-transform duration-200 ease-in-out" />
+                  ) : (
+                    <EyeOff className="h-4 w-4 transition-transform duration-200 ease-in-out" />
+                  )}
+                </button>
+              </div>
               <div className="flex items-center gap-2 text-sm text-gray-600">
                 <span>Test value:</span>
                 <button

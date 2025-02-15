@@ -83,7 +83,7 @@ export const EventModal: React.FC<EventModalProps> = ({
           {/* Speakers */}
           {event.speakers.length > 0 && (
             <div className="space-y-4">
-              <h3 className="text-xl font-semibold text-gray-900">Speakers</h3>
+              <h3 className="text-xl font-semibold text-gray-900">Speakers:</h3>
               <div className="space-y-3">
                 {event.speakers.map((speaker, index) => (
                   <div 
