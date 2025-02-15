@@ -92,7 +92,7 @@ export default function LoginPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-4" noValidate>
             <div className="space-y-1">
               <Label htmlFor="username" className="text-sm font-medium flex items-center gap-1">
                 Username
