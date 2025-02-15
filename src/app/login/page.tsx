@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import { useAuth } from "@/lib/auth-context"
+import { useAuth } from "@/context/AuthContext"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -19,6 +19,7 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false)
   const [usernameError, setUsernameError] = useState(false)
   const [passwordError, setPasswordError] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
   const { login } = useAuth()
 
@@ -38,30 +39,37 @@ export default function LoginPage() {
     setError("")
     setUsernameError(false)
     setPasswordError(false)
+    setIsLoading(true)
 
-    // Validate fields
-    let hasError = false
-    if (!username) {
-      setUsernameError(true)
-      hasError = true
-    }
-    if (!password) {
-      setPasswordError(true)
-      hasError = true
-    }
+    try {
+      // Validate fields
+      let hasError = false
+      if (!username) {
+        setUsernameError(true)
+        hasError = true
+      }
+      if (!password) {
+        setPasswordError(true)
+        hasError = true
+      }
 
-    if (hasError) {
-      setError("Please fill in all required fields")
-      return
-    }
+      if (hasError) {
+        setError("Please fill in all required fields")
+        return
+      }
 
-    const success = await login(username, password)
-    if (success) {
-      router.push("/events")
-    } else {
-      setError("Invalid credentials")
-      setUsernameError(true)
-      setPasswordError(true)
+      const success = await login(username, password)
+      if (success) {
+        router.push("/events")
+      } else {
+        setError("Invalid credentials")
+        setUsernameError(true)
+        setPasswordError(true)
+      }
+    } catch (error) {
+      setError("An error occurred. Please try again.")
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -84,7 +92,7 @@ export default function LoginPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form onSubmit={handleSubmit} className="space-y-4" noValidate>
+          <form onSubmit={handleSubmit} className="space-y-4">
             <div className="space-y-1">
               <Label htmlFor="username" className="text-sm font-medium flex items-center gap-1">
                 Username
@@ -99,13 +107,13 @@ export default function LoginPage() {
                   setUsernameError(false)
                   setError("")
                 }}
+                disabled={isLoading}
                 required
                 className={cn(
                   "h-11 rounded-xl bg-white border-[#E5E7EB] focus:border-primary focus:ring-primary transition-colors",
                   usernameError && "border-red-500 focus:border-red-500 focus:ring-red-500"
                 )}
                 placeholder="Enter your username"
-                noValidate
               />
               {usernameError && !error && (
                 <p className="text-red-500 text-sm mt-1">Username is required</p>
@@ -115,6 +123,7 @@ export default function LoginPage() {
                 <button
                   type="button"
                   onClick={() => handleCopy('hacker', 'user')}
+                  disabled={isLoading}
                   className="group flex items-center gap-2 px-2 py-1 bg-gray-100 rounded font-mono hover:bg-gray-200 transition-colors"
                 >
                   <code>hacker</code>
@@ -142,17 +151,18 @@ export default function LoginPage() {
                     setPasswordError(false)
                     setError("")
                   }}
+                  disabled={isLoading}
                   required
                   className={cn(
                     "h-11 rounded-xl bg-white border-[#E5E7EB] focus:border-primary focus:ring-primary pr-12 transition-all",
                     passwordError && "border-red-500 focus:border-red-500 focus:ring-red-500"
                   )}
                   placeholder="Enter your password"
-                  noValidate
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
+                  disabled={isLoading}
                   className={cn(
                     "absolute right-3 top-1/2 -translate-y-1/2",
                     "p-1.5 rounded-lg",
@@ -179,6 +189,7 @@ export default function LoginPage() {
                 <button
                   type="button"
                   onClick={() => handleCopy('htn2025', 'pass')}
+                  disabled={isLoading}
                   className="group flex items-center gap-2 px-2 py-1 bg-gray-100 rounded font-mono hover:bg-gray-200 transition-colors"
                 >
                   <code>htn2025</code>
@@ -200,8 +211,9 @@ export default function LoginPage() {
             <Button 
               type="submit" 
               className="w-full h-11 rounded-xl bg-primary hover:bg-primary/90 transition-colors"
+              disabled={isLoading}
             >
-              Sign In
+              {isLoading ? "Signing in..." : "Sign In"}
             </Button>
           </form>
         </CardContent>

@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { useAuth } from "@/lib/auth-context"
+import { useAuth } from "@/context/AuthContext"
 import type { TEvent, TEventType, TPermission } from "@/lib/types"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
@@ -26,7 +26,7 @@ import { Footer } from "@/components/Footer"
 
 export default function EventsPage() {
   const router = useRouter()
-  const { isAuthenticated, logout } = useAuth()
+  const { user, logout } = useAuth()
   const [events, setEvents] = useState<TEvent[]>([])
   const [filteredEvents, setFilteredEvents] = useState<TEvent[]>([])
   const [originalEvents, setOriginalEvents] = useState<TEvent[]>([])
@@ -43,7 +43,7 @@ export default function EventsPage() {
         const data: TEvent[] = await response.json()
 
         const sortedEvents = data.sort((a, b) => a.start_time - b.start_time)
-        const visibleEvents = isAuthenticated
+        const visibleEvents = user
           ? sortedEvents
           : sortedEvents.filter((event) => event.permission !== "private")
 
@@ -58,7 +58,7 @@ export default function EventsPage() {
     }
 
     fetchEvents()
-  }, [isAuthenticated])
+  }, [user])
 
   useEffect(() => {
     const filtered = events.filter(
@@ -94,7 +94,7 @@ export default function EventsPage() {
   const getRelatedEventNames = (relatedIds: number[]): { id: number; name: string; permission?: TPermission }[] => {
     return relatedIds
       .map((id) => events.find((e) => e.id === id))
-      .filter((event): event is TEvent => !!event && (isAuthenticated || event.permission !== "private"))
+      .filter((event): event is TEvent => !!event && (!!user || event.permission !== "private"))
   }
 
   // Add a function to check if current order matches original order
@@ -133,18 +133,18 @@ export default function EventsPage() {
                 placeholder="Search events..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="pl-9 bg-muted/50"
+                className="pl-9 bg-muted/50 font-medium placeholder:font-normal"
               />
             </div>
             <Select value={selectedType} onValueChange={(value) => setSelectedType(value as TEventType | "all")}>
-              <SelectTrigger className="w-[160px]">
+              <SelectTrigger className="w-[160px] font-medium">
                 <SelectValue placeholder="All Types" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Types</SelectItem>
-                <SelectItem value="workshop">Workshop</SelectItem>
-                <SelectItem value="activity">Activity</SelectItem>
-                <SelectItem value="tech_talk">Tech Talk</SelectItem>
+                <SelectItem value="all" className="font-medium">All Types</SelectItem>
+                <SelectItem value="workshop" className="font-medium">Workshop</SelectItem>
+                <SelectItem value="activity" className="font-medium">Activity</SelectItem>
+                <SelectItem value="tech_talk" className="font-medium">Tech Talk</SelectItem>
               </SelectContent>
             </Select>
             <Button variant="outline" size="sm" onClick={resetFilters} className="h-9 px-5">
@@ -182,7 +182,7 @@ export default function EventsPage() {
         onClose={() => setSelectedEvent(null)}
         onRelatedEventClick={handleRelatedEventClick}
         getRelatedEventNames={getRelatedEventNames}
-        isAuthenticated={isAuthenticated}
+        isAuthenticated={!!user}
       />
 
       <AlertDialog open={showLogoutDialog} onOpenChange={setShowLogoutDialog}>

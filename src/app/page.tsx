@@ -2,11 +2,11 @@
 
 import { Button } from "@/components/ui/button"
 import Link from "next/link"
-import { useAuth } from "@/lib/auth-context"
+import { useAuth } from "@/context/AuthContext"
 import { motion } from "framer-motion"
 
 export default function Home() {
-  const { isAuthenticated } = useAuth()
+  const { user } = useAuth()
 
   return (
     <div className="min-h-[calc(100vh-4rem)] relative overflow-hidden bg-dot-pattern">
@@ -72,7 +72,7 @@ export default function Home() {
             <Button asChild size="lg" className="rounded-full">
               <Link href="/events">Browse Events</Link>
             </Button>
-            {!isAuthenticated && (
+            {!user && (
               <Button asChild variant="outline" size="lg" className="rounded-full">
                 <Link href="/login">Hacker Login</Link>
               </Button>

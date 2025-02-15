@@ -73,7 +73,7 @@ export const EventTile: React.FC<EventTileProps> = ({ event, onClick }) => {
             <span className={`font-medium px-3 py-1 sm:px-4 sm:py-1.5 rounded-full ${getTagStyles(event.event_type)}`}>
               {formatEventType(event.event_type)}
             </span>
-            <span className="px-3 py-1 sm:px-4 sm:py-1.5 rounded-full border-2 border-gray-800 text-gray-800 font-medium">
+            <span className="px-3 py-1 sm:px-4 sm:py-1.5 rounded-full bg-black text-white font-medium shadow-sm">
               {formatTimeRange(event.start_time, event.end_time)}
             </span>
           </div>

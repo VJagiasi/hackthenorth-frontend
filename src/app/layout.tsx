@@ -1,16 +1,15 @@
 import type { Metadata } from "next"
 import { Inter } from "next/font/google"
 import "./globals.css"
+import { Navbar } from "@/components/navbar"
+import { AuthProvider } from "@/context/AuthContext"
+import type React from "react"
 
 const inter = Inter({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Hack the North",
-  description: "Canada's biggest hackathon",
-  icons: {
-    icon: "/icons/favicon.ico",
-    apple: "/icons/apple-touch-icon.png",
-  },
+  title: "Hack the North Events",
+  description: "Discover and explore Hack the North events",
 }
 
 export default function RootLayout({
@@ -19,15 +18,16 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
-      <head>
-        <link rel="icon" href="/icons/favicon.ico" />
-        <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />
-        <link rel="icon" type="image/png" sizes="32x32" href="/icons/favicon-32x32.png" />
-        <link rel="icon" type="image/png" sizes="16x16" href="/icons/favicon-16x16.png" />
-        <link rel="manifest" href="/icons/site.webmanifest" />
-      </head>
-      <body className={inter.className}>{children}</body>
+    <html lang="en" suppressHydrationWarning>
+      <body className={inter.className}>
+        <AuthProvider>
+          <div className="min-h-screen bg-background antialiased">
+            <Navbar />
+            <main>{children}</main>
+          </div>
+        </AuthProvider>
+      </body>
     </html>
   )
-} 
+}
+
