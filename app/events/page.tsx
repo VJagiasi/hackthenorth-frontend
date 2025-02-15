@@ -96,6 +96,16 @@ export default function EventsPage() {
       .filter((event): event is TEvent => !!event && (isAuthenticated || event.permission !== "private"))
   }
 
+  // Add a function to check if current order matches original order
+  const isDefaultOrder = () => {
+    return JSON.stringify(filteredEvents) === JSON.stringify(originalEvents.filter(
+      event => 
+        (selectedType === "all" || event.event_type === selectedType) &&
+        (event.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          event.description?.toLowerCase().includes(searchTerm.toLowerCase()))
+    ))
+  }
+
   if (loading) {
     return (
       <div className="container mx-auto px-4 py-8">
@@ -138,7 +148,13 @@ export default function EventsPage() {
           <Button variant="outline" size="sm" onClick={resetFilters} className="h-9 px-5">
             Clear Filters
           </Button>
-          <Button variant="outline" size="sm" onClick={resetSort} className="h-9 px-5">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={resetSort}
+            className="h-9 px-5"
+            disabled={isDefaultOrder()}
+          >
             Reset Sort
           </Button>
         </div>
