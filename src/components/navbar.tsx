@@ -5,8 +5,9 @@ import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { usePathname } from "next/navigation"
 import { useAuth } from "@/context/AuthContext"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { LogOut } from "lucide-react"
+import { motion, useScroll, useMotionValueEvent } from "framer-motion"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -22,9 +23,30 @@ export function Navbar() {
   const pathname = usePathname()
   const { isAuthenticated, logout } = useAuth()
   const [showLogoutDialog, setShowLogoutDialog] = useState(false)
+  const [isVisible, setIsVisible] = useState(true)
+  const [lastScrollY, setLastScrollY] = useState(0)
+
+  const { scrollY } = useScroll()
+
+  useMotionValueEvent(scrollY, "change", (latest) => {
+    const currentScrollY = latest
+    const scrollingDown = currentScrollY > lastScrollY
+    const scrollDifference = Math.abs(currentScrollY - lastScrollY)
+
+    // Only trigger hide/show if we've scrolled more than 20px
+    if (scrollDifference > 20) {
+      setIsVisible(!scrollingDown)
+      setLastScrollY(currentScrollY)
+    }
+  })
 
   return (
-    <nav className="border-b">
+    <motion.nav
+      className="fixed top-0 left-0 right-0 border-b bg-background/80 backdrop-blur-sm z-50"
+      initial={{ y: 0 }}
+      animate={{ y: isVisible ? 0 : "-100%" }}
+      transition={{ duration: 0.2, ease: "easeInOut" }}
+    >
       <div className="container mx-auto px-8 max-w-[900px] flex items-center justify-between h-16">
         <Link href="/" className="flex items-center gap-2">
           <Image
@@ -79,7 +101,7 @@ export function Navbar() {
           )}
         </div>
       </div>
-    </nav>
+    </motion.nav>
   )
 }
 

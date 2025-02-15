@@ -23,7 +23,7 @@ export default function RootLayout({
         <AuthProvider>
           <div className="min-h-screen bg-background antialiased">
             <Navbar />
-            <main>{children}</main>
+            <main className="pt-16">{children}</main>
           </div>
         </AuthProvider>
       </body>
