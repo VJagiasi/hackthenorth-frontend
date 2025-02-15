@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import Image from "next/image"
 import { Button } from "@/components/ui/button"
 import { usePathname } from "next/navigation"
 import { useAuth } from "@/lib/auth-context"
@@ -25,8 +26,17 @@ export function Navbar() {
   return (
     <nav className="border-b">
       <div className="container mx-auto px-4 max-w-screen-lg flex items-center justify-between h-16">
-        <Link href="/" className="font-bold text-xl gradient-text">
-          Hack the North
+        <Link href="/" className="flex items-center gap-2">
+          <Image
+            src="/hackthenorthlogo.png"
+            alt="Hack the North Logo"
+            width={32}
+            height={32}
+            className="w-8 h-8"
+          />
+          <span className="font-bold text-xl gradient-text">
+            Hack the North
+          </span>
         </Link>
         <div className="flex items-center gap-4">
           {isAuthenticated ? (
